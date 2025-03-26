@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
+import AppLayout from './components/layout/AppLayout';
+import Home from './pages/Home';
+import Report from './pages/Report';
+import NoMatch from './pages/NoMatch';
+import { theme } from './theme/theme';
+// import { AppContextProvider } from './context/AppContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <AppContextProvider >
+      <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BrowserRouter>
+            <Routes>
+              <Route path='/' element={<AppLayout />}>
+                <Route index element={ 
+                  <Home /> 
+                } />
+                <Route path='/report' element={ 
+                  <Report />
+                } />
+                <Route path='/*' element={ <NoMatch /> } />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+      </ThemeProvider>
+    // </AppContextProvider>
   );
 }
 
