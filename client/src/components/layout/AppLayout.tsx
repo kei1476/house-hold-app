@@ -68,7 +68,7 @@ export default function AppLayout() {
   return (
     <Box sx={{ 
       display: {md: "flex"}, // 900px以下でflexにしているとレポート画面にて表示がおかしくなるためmd以上でflex
-      bgcolor: (theme) => theme.palette.grey[100], 
+      bgcolor: (theme) => theme.palette.pageColor.light, 
       minHeight: "100vh" 
     }}>
       <CssBaseline />
@@ -76,32 +76,25 @@ export default function AppLayout() {
       <AppBar
         position="fixed"
         sx={{
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
+          // width: { md: `calc(100% - ${drawerWidth}px)` },
+          // ml: { md: `${drawerWidth}px` },
+          bgcolor: (theme) => theme.palette.pageColor.main, 
         }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" noWrap component="div">
             家計簿アプリ
           </Typography>
+          
         </Toolbar>
       </AppBar>
 
-			<Sidebar
+			{/* <Sidebar
 				drawerWidth={drawerWidth} 
 				mobileOpen={mobileOpen} 
 				handleDrawerClose={handleDrawerClose} 
 				handleDrawerTransitionEnd={handleDrawerTransitionEnd} 
-			/>
+			/> */}
 
 			{/* メインコンテンツ */}
       <Box
