@@ -2,19 +2,18 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from '@mui/icons-material/Home';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Sidebar from "../common/Sidebar";
+import { NavLink, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
 const drawerWidth = 240;
 
 export default function AppLayout() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
-  console.log(process.env.REACT_APP_WEB_URL)
+  const location = useLocation();
 
   // const {setTransactions, setIsLoading} = useAppContext();
 
@@ -50,20 +49,37 @@ export default function AppLayout() {
   //   fetchTransactions();
   // },[]);
 
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
-  };
+  
 
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false);
-  };
+  interface menuItem {
+    text: string,
+    path: string,
+    icon: React.ComponentType
+  }
+  const MenuItems: menuItem[] = [
+    {
+      text: 'ホーム',
+      path: '/',
+      icon: HomeIcon
+    },
+    {
+      text: '分析',
+      path: '/report',
+      icon: EqualizerIcon
+    },
+  ]
 
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
+  const baseLinkStyle: React.CSSProperties = {
+    height: '64px',
+    textDecoration: "none",
+    color: "inherit",
+    display: "flex"
+  }
+
+  const activeLinkStyle: React.CSSProperties = {
+    borderBottom: 'solid 3px #43a047',
+    color: '#43a047'
+  }
 
   return (
     <Box sx={{ 
@@ -78,23 +94,34 @@ export default function AppLayout() {
         sx={{
           // width: { md: `calc(100% - ${drawerWidth}px)` },
           // ml: { md: `${drawerWidth}px` },
-          bgcolor: (theme) => theme.palette.pageColor.main, 
+          bgcolor: (theme) => theme.palette.pageColor.light, 
+          color: 'black'
         }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ mr: 2 }}>
             家計簿アプリ
           </Typography>
-          
+          {MenuItems.map((item, index) => (
+            // isActiveはNavLinkが持っている値
+            <NavLink key={index} to={item.path} style={({isActive}) => {
+              return {
+                ...baseLinkStyle,
+                ...(isActive ? activeLinkStyle : {})
+              }
+            }} >
+              <ListItem key={index} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon sx={{ color: location.pathname === item.path ? '#43a047' : 'inherit' }}>
+                    <item.icon />
+                  </ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
+          ))}
         </Toolbar>
       </AppBar>
-
-			{/* <Sidebar
-				drawerWidth={drawerWidth} 
-				mobileOpen={mobileOpen} 
-				handleDrawerClose={handleDrawerClose} 
-				handleDrawerTransitionEnd={handleDrawerTransitionEnd} 
-			/> */}
 
 			{/* メインコンテンツ */}
       <Box

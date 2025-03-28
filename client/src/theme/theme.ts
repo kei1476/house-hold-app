@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material";
-import { blue, green, lightGreen, red } from "@mui/material/colors";
+import { blue, green, red, grey, orange } from "@mui/material/colors";
 
 interface paletteColor {
   main: string;
@@ -13,6 +13,7 @@ declare module "@mui/material/styles" {
     incomeColor: paletteColor;
     expenseColor: paletteColor;
     balanceColor: paletteColor;
+    budgetColor: paletteColor;
     incomeCategoryColor: string;
     expenseCategoryColor: string;
   }
@@ -22,6 +23,7 @@ declare module "@mui/material/styles" {
     incomeColor?: paletteColor;
     expenseColor?: paletteColor;
     balanceColor?: paletteColor;
+    budgetColor?: paletteColor;
     incomeCategoryColor?: string;
     expenseCategoryColor?: string;
   }
@@ -38,9 +40,9 @@ export const theme = createTheme({
   // paletteは色を定義するプロパティ
   palette: {
 		pageColor: {
-      main: lightGreen[500],
-      light: lightGreen[50],
-      dark: lightGreen[700],
+      main: grey[500],
+      light: grey[50],
+      dark: grey[700],
     },
     incomeColor: {
       main: blue[400],
@@ -56,6 +58,11 @@ export const theme = createTheme({
       main: green[400],
       light: green[100],
       dark: green[700],
+    },
+    budgetColor: {
+      main: orange[400],
+      light: orange[100],
+      dark: orange[700],
     }
   }
 })

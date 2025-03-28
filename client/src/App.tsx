@@ -4,7 +4,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import AppLayout from './components/layout/AppLayout';
 import Home from './pages/Home';
-import Report from './pages/Report';
+import Report from './pages/Analysis';
 import NoMatch from './pages/NoMatch';
 import { theme } from './theme/theme';
 // import { AppContextProvider } from './context/AppContext';
