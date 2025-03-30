@@ -14,7 +14,6 @@ class Transaction extends Model
 
 	protected $casts = [
 		'category_id' => 'int',
-		'type' => 'int',
 		'amount' => 'int',
 	];
 

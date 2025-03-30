@@ -3,8 +3,14 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import FlagIcon from '@mui/icons-material/Flag';
 import SavingsIcon from '@mui/icons-material/Savings';
+import { Transaction } from "../types";
+import { calculateTransactions } from "../utils/calculateTransactions";
+interface MonthlySummaryProps {
+	monthlyTransactions: Transaction[];
+}
 
-const MonthlySummary = () => {
+const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
+	const {income, expense, balance} = calculateTransactions(monthlyTransactions);
   return (
     <Grid2 container spacing={{ xs:1, sm:2 }} mb={2}>
       {/* 収入 */}
@@ -24,7 +30,7 @@ const MonthlySummary = () => {
                 fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
               }}
             >
-              ¥350000
+              ¥{income}
             </Typography>
           </CardContent>
         </Card>
@@ -47,7 +53,7 @@ const MonthlySummary = () => {
                   fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
                 }}
               >
-                ¥200000
+                ¥{expense}
               </Typography>
             </CardContent>
           </Card>
@@ -70,7 +76,7 @@ const MonthlySummary = () => {
                 fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
               }}
             >
-              ¥100000
+              ¥{balance}
             </Typography>
           </CardContent>
         </Card>

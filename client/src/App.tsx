@@ -7,28 +7,49 @@ import Home from './pages/Home';
 import Report from './pages/Analysis';
 import NoMatch from './pages/NoMatch';
 import { theme } from './theme/theme';
-// import { AppContextProvider } from './context/AppContext';
+import { useEffect, useState } from 'react';
+import { Transaction } from './types';
+import { backendAxios } from './lib/backendAxios';
+import { format } from "date-fns";
 
 function App() {
+  const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  
+  useEffect(() => {
+    const fetchMonthlyTransactions = async () => {
+      try {
+        const params = {
+          currentMonth: format(currentMonth, 'yyyy-MM')
+        }
+        const res = await backendAxios.get('transaction', {params});
+        setMonthlyTransactions(res.data);
+      } catch(err) {
+        console.error(err);
+      }
+    }
+
+    fetchMonthlyTransactions();
+  },[]);
+
+  useEffect(() => {
+    console.log('test');
+    console.log(monthlyTransactions);
+  }, [monthlyTransactions]);
+
   return (
-    // <AppContextProvider >
       <ThemeProvider theme={theme}>
           <CssBaseline />
           <BrowserRouter>
             <Routes>
               <Route path='/' element={<AppLayout />}>
-                <Route index element={ 
-                  <Home /> 
-                } />
-                <Route path='/report' element={ 
-                  <Report />
-                } />
+                <Route index element={ <Home monthlyTransactions={monthlyTransactions} /> } />
+                <Route path='/report' element={ <Report /> } />
                 <Route path='/*' element={ <NoMatch /> } />
               </Route>
             </Routes>
           </BrowserRouter>
       </ThemeProvider>
-    // </AppContextProvider>
   );
 }
 

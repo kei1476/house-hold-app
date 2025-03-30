@@ -4,22 +4,24 @@ import MonthlySummary from '../components/MonthlySummary'
 import Calender from '../components/Calender'
 import TransactionMenu from '../components/TransactionMenu'
 import TransactionForm from '../components/TransactionForm'
+import { Transaction } from '../types'
 
-const Home = () => {
+interface HomeProps {
+  monthlyTransactions: Transaction[];
+}
+
+const Home = ({ monthlyTransactions }: HomeProps) => {
   return (
     <Box sx={{ display: "flex" }}>
       {/* 画面幅狭くなると右側コンテンツは非表示なのでflex:growで指定 */}
       <Box sx={{  flexGrow: 1 }}>
-        <MonthlySummary />
-        <Calender
-        />
+        <MonthlySummary monthlyTransactions={monthlyTransactions} />
+        <Calender/>
       </Box>
 
       <Box>
-        <TransactionMenu 
-        />
-        <TransactionForm
-        />
+        <TransactionMenu />
+        <TransactionForm/>
       </Box>
     </Box>
   )

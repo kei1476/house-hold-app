@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('category_id')->unsigned();
-            $table->tinyInteger('type')->nullable(false)->comment('収支タイプ');
-            $table->string('date')->nullable(false)->comment('取引日時');
+            $table->string('type')->nullable(false)->comment('収支タイプ');
+            $table->timestamp('date')->nullable(false)->comment('取引日時');
             $table->integer('amount')->nullable(false)->comment('金額');
             $table->string('content', 100)->nullable()->comment('内容');
             $table->timestamps();
