@@ -15,3 +15,9 @@ export interface Balance {
   expense: number;
   balance: number;
 }
+export interface CalenderEvent {
+  start: string
+  income: number;
+  expense: number;
+  balance: number;
+}

@@ -30,12 +30,7 @@ function App() {
     }
 
     fetchMonthlyTransactions();
-  },[]);
-
-  useEffect(() => {
-    console.log('test');
-    console.log(monthlyTransactions);
-  }, [monthlyTransactions]);
+  },[currentMonth]);
 
   return (
       <ThemeProvider theme={theme}>
@@ -43,7 +38,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path='/' element={<AppLayout />}>
-                <Route index element={ <Home monthlyTransactions={monthlyTransactions} /> } />
+                <Route index element={ <Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} /> } />
                 <Route path='/report' element={ <Report /> } />
                 <Route path='/*' element={ <NoMatch /> } />
               </Route>
