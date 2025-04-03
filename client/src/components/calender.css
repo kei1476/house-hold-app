@@ -1,8 +1,9 @@
-.fc-h-event {
-  background-color: transparent;
-  border: none;
-  text-align: right;
+.fc-daygrid-event-harness {
   pointer-events: none; 
+  text-align: right;
+}
+.fc-daygrid-dot-event {
+  justify-content: end;
 }
 .fc .fc-daygrid-day-frame {
   height: 100%;

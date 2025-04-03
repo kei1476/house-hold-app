@@ -4,17 +4,32 @@ import { DatesSetArg, EventContentArg } from '@fullcalendar/core'
 import './calender.css'
 import { Balance, CalenderEvent, Transaction } from '../types'
 import { calculateDailyTransactions } from '../utils/calculateTransactions'
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import { theme } from '../theme/theme'
+import { isSameMonth } from 'date-fns'
 
 interface CalenderProps {
+	today: string;
+	currentDay: string;
 	monthlyTransactions: Transaction[];
 	setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
+	setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Calender = ({monthlyTransactions, setCurrentMonth}: CalenderProps) => {
+const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setCurrentDay}: CalenderProps) => {
 	const createCalenderEvent = (dailyTransactions: Record<string,Balance>): CalenderEvent[] => {
 		const days = Object.keys(dailyTransactions);
 		return days.map((day) => {
-			const {income, expense, balance} = dailyTransactions[day];
+			const {income, expense, balance,} = dailyTransactions[day];
+			if(currentDay === day) {
+				return {
+					start: day,
+					income,
+					expense, 
+					balance,
+					backgroundColor: 'red'
+				}
+			}
 			return {
 				start: day,
 				income,
@@ -44,20 +59,33 @@ const Calender = ({monthlyTransactions, setCurrentMonth}: CalenderProps) => {
 	}
 
 	const handleDateSet = (dateSetInfo: DatesSetArg) => {
-		setCurrentMonth(dateSetInfo.view.currentStart);
+		const currentMonth = dateSetInfo.view.currentStart;
+		setCurrentMonth(currentMonth);
+
+		const todayDate = new Date();
+		if(isSameMonth(todayDate, currentMonth)) {
+			setCurrentDay(today);
+		}
 	}
+
+	const backgroundEvent = {
+    start: currentDay,
+    display: "background",
+    backgroundColor: theme.palette.incomeColor.light,
+  };
 
 	return (
 		<FullCalendar
 			locale='ja'
-			plugins={[dayGridPlugin]}
+			plugins={[dayGridPlugin, interactionPlugin]}
 			initialView='dayGridMonth'
-			events={events}
+			events={[...events, backgroundEvent]}
 			eventContent={renderEventContent}
 			buttonText={{ 
 				today: '今日',
 			}}
 			datesSet={handleDateSet}
+			dateClick={(dateInfo: DateClickArg) => setCurrentDay(dateInfo.dateStr)}
 		/>
 	)
 }
