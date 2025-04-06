@@ -10,6 +10,12 @@ export interface Transaction {
   category_name: string;
 }
 
+export interface Category {
+  id: number;
+  type: string;
+  name: string;
+}
+
 export interface Balance {
   income: number;
   expense: number;

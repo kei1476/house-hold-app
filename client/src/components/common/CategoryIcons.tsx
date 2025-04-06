@@ -1,4 +1,4 @@
-import FastfoodIcon from "@mui/icons-material/Fastfood";
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 import AlarmIcon from "@mui/icons-material/Alarm";
 import AddHomeIcon from "@mui/icons-material/AddHome";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
@@ -8,7 +8,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import { JSX } from "react";
 
 const IconComponents: Record<string, JSX.Element> = {
-  食費: <FastfoodIcon fontSize="small" />,
+  食費: <RestaurantIcon fontSize="small" />,
   日用品: <AlarmIcon fontSize="small" />,
   住居費: <AddHomeIcon fontSize="small" />,
   交際費: <Diversity3Icon fontSize="small" />,

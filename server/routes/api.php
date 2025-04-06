@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
@@ -22,5 +23,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::get('/test', [TestController::class, 'index']);
 
 Route::prefix('transaction')->group(function () {
-    Route::get('/', [TransactionController::class, 'index']);
+    Route::get('/currentMonth', [TransactionController::class, 'index']);
+});
+
+Route::prefix('category')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']);
 });

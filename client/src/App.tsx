@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Transaction } from './types';
 import { backendAxios } from './lib/backendAxios';
 import { format } from "date-fns";
+import { TransactionFormSchemaType } from './validations';
 
 function App() {
   const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
@@ -22,7 +23,7 @@ function App() {
         const params = {
           currentMonth: format(currentMonth, 'yyyy-MM')
         }
-        const res = await backendAxios.get('transaction', {params});
+        const res = await backendAxios.get('transaction/currentMonth/', {params});
         setMonthlyTransactions(res.data);
       } catch(err) {
         console.error(err);

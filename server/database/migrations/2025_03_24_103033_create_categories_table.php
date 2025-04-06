@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('type')->nullable(false)->comment('収支タイプ');
+            $table->string('type')->nullable(false)->comment('収支タイプ');
             $table->string('name', 100)->nullable(false)->comment('カテゴリ名');
             $table->timestamps();
             $table->softDeletes()->nullable();
