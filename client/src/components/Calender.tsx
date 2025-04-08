@@ -17,19 +17,13 @@ interface CalenderProps {
 }
 
 const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setCurrentDay}: CalenderProps) => {
+	const dailyTransactions = calculateDailyTransactions(monthlyTransactions);
+
+	console.log(dailyTransactions)
 	const createCalenderEvent = (dailyTransactions: Record<string,Balance>): CalenderEvent[] => {
 		const days = Object.keys(dailyTransactions);
 		return days.map((day) => {
 			const {income, expense, balance,} = dailyTransactions[day];
-			if(currentDay === day) {
-				return {
-					start: day,
-					income,
-					expense, 
-					balance,
-					backgroundColor: 'red'
-				}
-			}
 			return {
 				start: day,
 				income,
@@ -38,10 +32,13 @@ const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setC
 			}
 		})
 	}
-
-	const dailyTransactions = calculateDailyTransactions(monthlyTransactions);
 	const events = createCalenderEvent(dailyTransactions);
 
+	const backgroundEvent = {
+		start: currentDay,
+		display: "background",
+		backgroundColor: theme.palette.incomeColor.light,
+	};
 	const renderEventContent = (eventInfo: EventContentArg) => {
 		return (
 			<div>
@@ -67,12 +64,6 @@ const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setC
 			setCurrentDay(today);
 		}
 	}
-
-	const backgroundEvent = {
-    start: currentDay,
-    display: "background",
-    backgroundColor: theme.palette.incomeColor.light,
-  };
 
 	return (
 		<FullCalendar

@@ -8,15 +8,17 @@ import { TransactionFormSchema, TransactionFormSchemaType } from '../validations
 
 interface TransactionFormProps {
   currentDay: string;
+  storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>
 }
 
-const TransactionForm = ({ currentDay }: TransactionFormProps) => {
+const TransactionForm = ({ currentDay, storeTransactions }: TransactionFormProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const { 
     register, 
     handleSubmit, 
     watch, 
     setValue,  
+    reset,
     formState: { errors }
   } = useForm<TransactionFormSchemaType>({
     resolver: zodResolver(TransactionFormSchema),
@@ -25,7 +27,7 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
       date: currentDay,
       amount: 0,
       content: '',
-      category: 0,
+      category_id: 0,
     }
   });
   const currentType = watch('type');
@@ -46,8 +48,19 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
     }
   }, [currentType]);
 
+  useEffect(() => {
+    setValue("date", currentDay);
+  }, [currentDay]);
+
   const onSubmit: SubmitHandler<TransactionFormSchemaType> = (data) => {
-    console.log(data)
+    storeTransactions(data);
+    reset({
+      type: 'expense',
+      date: currentDay,
+      amount: 0,
+      content: '',
+      category_id: 0
+    });
   }
 
   const toggleType = (currentType: TransactionType) => {
@@ -56,7 +69,7 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
 
   return (
     <Box mb={2}>
-      <Typography variant="h6" fontWeight={"fontWeightBold"} mb={1}>収支入力</Typography>
+      <Typography variant="h6" fontWeight={"fontWeightBold"}>収支入力</Typography>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           <input {...register("type", { value: "expense" })} type="hidden" />
@@ -79,10 +92,9 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
           </ButtonGroup>
           <TextField
             type="date"
-            defaultValue={currentDay}
             size="small"
             sx={fontsizeCss}
-            {...register("date")}
+            {...register("date", {value: currentDay})}
             error={!!errors.date}
           />
           {errors.date?.message && (<Typography color="error" fontSize={12}>{errors.date?.message}</Typography>)}
@@ -92,8 +104,8 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
             label="カテゴリ"
             size="small"
             sx={fontsizeCss}
-            {...register("category")}
-            error={!!errors.category}
+            {...register("category_id", { valueAsNumber: true })}
+            error={!!errors.category_id}
           >
             {categories.map((category) => {
               return (
@@ -103,7 +115,7 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
               );
             })}
           </TextField>
-          {errors.category?.message && (<Typography color='error' fontSize={12}>{errors.category?.message}</Typography>)}
+          {errors.category_id?.message && (<Typography color='error' fontSize={12}>{errors.category_id?.message}</Typography>)}
 
 
           <TextField
@@ -111,7 +123,7 @@ const TransactionForm = ({ currentDay }: TransactionFormProps) => {
             type="number"
             size="small"
             sx={fontsizeCss}
-            {...register("amount")}
+            {...register("amount", { valueAsNumber: true })}
             error={!!errors.amount}
           />
           {errors.amount?.message && (<Typography color='error' fontSize={12}>{errors.amount?.message}</Typography>)}

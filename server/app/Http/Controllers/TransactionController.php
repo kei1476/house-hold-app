@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,35 +38,26 @@ class TransactionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $requestPram = $request->get('params');
+        $newTransaction = Transaction::create($requestPram['transaction']);
+        $newTransaction->load('category');
+        Log::debug($newTransaction);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $res = [
+            'id' => $newTransaction->id,
+            'type' => $newTransaction->type,
+            'date' => $newTransaction->date,
+            'amount' => $newTransaction->amount,
+            'content' => $newTransaction->content,
+            'category_id' => $newTransaction->category->id,
+            'category_name' => $newTransaction->category->name
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json($res);
     }
 
     /**

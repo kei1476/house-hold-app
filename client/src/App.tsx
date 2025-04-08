@@ -16,7 +16,7 @@ import { TransactionFormSchemaType } from './validations';
 function App() {
   const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  
+
   useEffect(() => {
     const fetchMonthlyTransactions = async () => {
       try {
@@ -24,7 +24,11 @@ function App() {
           currentMonth: format(currentMonth, 'yyyy-MM')
         }
         const res = await backendAxios.get('transaction/currentMonth/', {params});
-        setMonthlyTransactions(res.data);
+        const test = res.data.map((transaction: Transaction) => {
+          transaction.date = format(transaction.date, 'yyyy-MM-dd');
+          return transaction
+        })
+        setMonthlyTransactions(test);
       } catch(err) {
         console.error(err);
       }
@@ -33,13 +37,26 @@ function App() {
     fetchMonthlyTransactions();
   },[currentMonth]);
 
+  const storeTransactions = async (transaction: TransactionFormSchemaType) => {
+    try {
+      const params = {
+        transaction: transaction
+      }
+      const res = await backendAxios.post('transaction', {params});
+      res.data.date = format(res.data.date, 'yyyy-MM-dd');
+      setMonthlyTransactions((prevTransactions) => [...prevTransactions, res.data]);
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   return (
       <ThemeProvider theme={theme}>
           <CssBaseline />
           <BrowserRouter>
             <Routes>
               <Route path='/' element={<AppLayout />}>
-                <Route index element={ <Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} /> } />
+                <Route index element={ <Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} storeTransactions={storeTransactions} /> } />
                 <Route path='/report' element={ <Report /> } />
                 <Route path='/*' element={ <NoMatch /> } />
               </Route>

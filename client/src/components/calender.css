@@ -9,6 +9,10 @@
   height: 100%;
   min-height: 100px;
 }
+.fc-h-event {
+  background-color: transparent;
+  border: none;
+}
 .money {
   white-space: nowrap; /* テキストを折り返さない */
   overflow: hidden; /* はみ出したテキストを隠す */

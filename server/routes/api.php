@@ -17,13 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::get('/test', [TestController::class, 'index']);
+// Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+// Route::get('/test', [TestController::class, 'index']);
 
 Route::prefix('transaction')->group(function () {
     Route::get('/currentMonth', [TransactionController::class, 'index']);
+    Route::post('/', [TransactionController::class, 'store']);
 });
 
 Route::prefix('category')->group(function () {

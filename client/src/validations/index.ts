@@ -15,7 +15,7 @@ export const TransactionFormSchema = z.object({
       message: '50文字以内で記入してください' 
     })
     .optional(),
-  category: z.number()
+  category_id: z.number()
     .min(1, {
       message: "カテゴリは必須です。"
     }),
