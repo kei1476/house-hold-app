@@ -11,15 +11,21 @@ import { TransactionFormSchemaType } from '../validations'
 interface HomeProps {
   monthlyTransactions: Transaction[];
   setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
-  storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>
+  storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>;
+  deleteTransactions: (transactionId: number) => Promise<void>;
 }
 
-const Home = ({ monthlyTransactions, setCurrentMonth, storeTransactions }: HomeProps) => {
+const Home = ({ monthlyTransactions, setCurrentMonth, storeTransactions, deleteTransactions }: HomeProps) => {
   const today = format(new Date(), 'yyyy-MM-dd')
   const [currentDay, setCurrentDay] = useState(today);
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
 
   const dailyTransactions = monthlyTransactions
     .filter((monthlyTransaction: Transaction) => format(monthlyTransaction.date, 'yyyy-MM-dd') === currentDay);
+
+  const onSelectTransaction = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -36,8 +42,8 @@ const Home = ({ monthlyTransactions, setCurrentMonth, storeTransactions }: HomeP
       </Box>
 
       <Box width={300} ml={2}>
-        <TransactionForm currentDay={currentDay} storeTransactions={storeTransactions} />
-        <TransactionMenu currentDay={currentDay} dailyTransactions={dailyTransactions} />
+        <TransactionForm currentDay={currentDay} storeTransactions={storeTransactions} selectedTransaction={selectedTransaction}/>
+        <TransactionMenu currentDay={currentDay} dailyTransactions={dailyTransactions} onSelectTransaction={onSelectTransaction} deleteTransactions={deleteTransactions} />
       </Box>
     </Box>
   )

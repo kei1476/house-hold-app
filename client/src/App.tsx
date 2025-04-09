@@ -50,13 +50,29 @@ function App() {
     }
   }
 
+  const deleteTransactions = async (transactionId: number) => {
+    try {
+      await backendAxios.delete(`transaction/${transactionId}`);
+      setMonthlyTransactions((prevTransactions) => prevTransactions.filter((prevTransaction) => prevTransaction.id !== transactionId));
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   return (
       <ThemeProvider theme={theme}>
           <CssBaseline />
           <BrowserRouter>
             <Routes>
               <Route path='/' element={<AppLayout />}>
-                <Route index element={ <Home monthlyTransactions={monthlyTransactions} setCurrentMonth={setCurrentMonth} storeTransactions={storeTransactions} /> } />
+                <Route index element={ 
+                    <Home 
+                      monthlyTransactions={monthlyTransactions} 
+                      setCurrentMonth={setCurrentMonth} 
+                      storeTransactions={storeTransactions}
+                      deleteTransactions={deleteTransactions}
+                    /> 
+                  } />
                 <Route path='/report' element={ <Report /> } />
                 <Route path='/*' element={ <NoMatch /> } />
               </Route>

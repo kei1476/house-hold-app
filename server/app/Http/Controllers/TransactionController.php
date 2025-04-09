@@ -73,6 +73,6 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Transaction::destroy($id);
     }
 }

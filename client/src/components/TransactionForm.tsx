@@ -1,20 +1,22 @@
 import { Box, Button, ButtonGroup, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { backendAxios } from '../lib/backendAxios'
 import { useEffect, useState } from 'react'
-import { Category, TransactionType } from '../types';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Category, Transaction, TransactionType } from '../types';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TransactionFormSchema, TransactionFormSchemaType } from '../validations';
 
 interface TransactionFormProps {
   currentDay: string;
-  storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>
+  storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>;
+  selectedTransaction: Transaction | null;
 }
 
-const TransactionForm = ({ currentDay, storeTransactions }: TransactionFormProps) => {
+const TransactionForm = ({ currentDay, storeTransactions, selectedTransaction }: TransactionFormProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const { 
     register, 
+    control,
     handleSubmit, 
     watch, 
     setValue,  
@@ -42,7 +44,7 @@ const TransactionForm = ({ currentDay, storeTransactions }: TransactionFormProps
         console.error(err);
       }
     };
-  
+
     if (currentType) {
       fetchCategories();
     }
@@ -62,10 +64,25 @@ const TransactionForm = ({ currentDay, storeTransactions }: TransactionFormProps
       category_id: 0
     });
   }
-
+console.log(errors)
   const toggleType = (currentType: TransactionType) => {
     setValue('type', currentType);
   }
+
+  useEffect(() => {
+    if(selectedTransaction) {
+      setValue('type', selectedTransaction.type)
+      setValue('category_id', selectedTransaction.category_id)
+      setValue('amount', selectedTransaction.amount)
+      if (selectedTransaction?.content !== undefined) {
+        setValue('content', selectedTransaction.content, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+      }
+      setValue('date', selectedTransaction.date)
+    }
+  },[selectedTransaction]);
 
   return (
     <Box mb={2}>
@@ -99,24 +116,32 @@ const TransactionForm = ({ currentDay, storeTransactions }: TransactionFormProps
           />
           {errors.date?.message && (<Typography color="error" fontSize={12}>{errors.date?.message}</Typography>)}
 
-          <TextField
-            select
-            label="カテゴリ"
-            size="small"
-            sx={fontsizeCss}
-            {...register("category_id", { valueAsNumber: true })}
-            error={!!errors.category_id}
-          >
-            {categories.map((category) => {
-              return (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.name}
-                </MenuItem>
-              );
-            })}
-          </TextField>
-          {errors.category_id?.message && (<Typography color='error' fontSize={12}>{errors.category_id?.message}</Typography>)}
-
+          <Controller
+            name="category_id"
+            control={control}
+            render={({ field }) => (
+              <>
+                <TextField
+                  select
+                  label="カテゴリ"
+                  size="small"
+                  sx={fontsizeCss}
+                  error={!!errors.category_id}
+                  {...field}
+                >
+                  {categories.map((category) => {
+                    return (
+                      <MenuItem key={category.id} value={category.id}>
+                        {category.name}
+                      </MenuItem>
+                    );
+                  })}
+                </TextField>
+                {errors.category_id?.message && (<Typography color='error' fontSize={12}>{errors.category_id?.message}</Typography>)}
+              </>
+              
+            )}
+          />
 
           <TextField
             label="金額"
@@ -128,14 +153,19 @@ const TransactionForm = ({ currentDay, storeTransactions }: TransactionFormProps
           />
           {errors.amount?.message && (<Typography color='error' fontSize={12}>{errors.amount?.message}</Typography>)}
 
-          <TextField
-            label="内容"
-            multiline
-            rows={1}
-            size="small"
-            sx={fontsizeCss}
-            {...register("content")}
-            error={!!errors.content}
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="内容"
+                rows={1}
+                size="small"
+                sx={fontsizeCss}
+                error={!!errors.content}
+                {...field}
+              />
+            )}
           />
           {errors.content?.message && (<Typography color='error' fontSize={12}>{errors.content?.message}</Typography>)}
 

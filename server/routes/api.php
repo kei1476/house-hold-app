@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('transaction')->group(function () {
     Route::get('/currentMonth', [TransactionController::class, 'index']);
     Route::post('/', [TransactionController::class, 'store']);
+    Route::delete('/{id}', [TransactionController::class, 'destroy']);
 });
 
 Route::prefix('category')->group(function () {
