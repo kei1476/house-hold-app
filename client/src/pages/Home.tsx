@@ -39,6 +39,7 @@ const Home = ({ monthlyTransactions, setCurrentMonth, storeTransactions, updateT
           monthlyTransactions={monthlyTransactions} 
           setCurrentMonth={setCurrentMonth} 
           setCurrentDay={setCurrentDay}
+          setSelectedTransaction={setSelectedTransaction}
         />
       </Box>
 

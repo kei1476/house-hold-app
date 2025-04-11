@@ -14,9 +14,10 @@ interface CalenderProps {
 	monthlyTransactions: Transaction[];
 	setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
 	setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
+	setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction | null>>;
 }
 
-const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setCurrentDay}: CalenderProps) => {
+const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setCurrentDay, setSelectedTransaction}: CalenderProps) => {
 	const dailyTransactions = calculateDailyTransactions(monthlyTransactions);
 
 	const createCalenderEvent = (dailyTransactions: Record<string,Balance>): CalenderEvent[] => {
@@ -63,6 +64,10 @@ const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setC
 			setCurrentDay(today);
 		}
 	}
+	const handleDateClick = (dateInfo: DateClickArg) => {
+		setCurrentDay(dateInfo.dateStr)
+		setSelectedTransaction(null);
+	}
 
 	return (
 		<FullCalendar
@@ -75,7 +80,7 @@ const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setC
 				today: '今日',
 			}}
 			datesSet={handleDateSet}
-			dateClick={(dateInfo: DateClickArg) => setCurrentDay(dateInfo.dateStr)}
+			dateClick={handleDateClick}
 		/>
 	)
 }

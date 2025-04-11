@@ -87,6 +87,14 @@ const TransactionForm = ({ currentDay, storeTransactions, updateTransactions, se
         });
       }
       setValue('date', selectedTransaction.date)
+    }else {
+      reset({
+        type: 'expense',
+        date: currentDay,
+        amount: 0,
+        content: '',
+        category_id: 0
+      });
     }
   },[selectedTransaction]);
 
