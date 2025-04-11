@@ -50,8 +50,26 @@ function App() {
     }
   }
 
+  const updateTransactions = async (transaction: TransactionFormSchemaType, transactionId: number) => {
+    try {
+      if(!transactionId) throw new Error('idが存在しません');
+      const params = {
+        transaction: transaction
+      }
+      const res = await backendAxios.put(`transaction/${transactionId}`, {params});
+      res.data.date = format(res.data.date, 'yyyy-MM-dd');
+      const updatedTransactions = monthlyTransactions.map((monthlyTransaction): Transaction => {
+        return monthlyTransaction.id === transactionId ? {...monthlyTransaction, ...res.data} : monthlyTransaction;
+      })
+      setMonthlyTransactions(updatedTransactions);
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   const deleteTransactions = async (transactionId: number) => {
     try {
+      if(!transactionId) throw new Error('idが存在しません');
       await backendAxios.delete(`transaction/${transactionId}`);
       setMonthlyTransactions((prevTransactions) => prevTransactions.filter((prevTransaction) => prevTransaction.id !== transactionId));
     } catch(err) {
@@ -70,6 +88,7 @@ function App() {
                       monthlyTransactions={monthlyTransactions} 
                       setCurrentMonth={setCurrentMonth} 
                       storeTransactions={storeTransactions}
+                      updateTransactions={updateTransactions}
                       deleteTransactions={deleteTransactions}
                     /> 
                   } />

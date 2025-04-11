@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const TransactionFormSchema = z.object({
+  id: z.number().optional(),
   type: z.enum(['expense', 'income']),
   date: z.string()
     .min(1, {

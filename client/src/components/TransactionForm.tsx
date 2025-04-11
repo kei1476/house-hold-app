@@ -9,10 +9,11 @@ import { TransactionFormSchema, TransactionFormSchemaType } from '../validations
 interface TransactionFormProps {
   currentDay: string;
   storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>;
+  updateTransactions: (transaction: TransactionFormSchemaType, id: number) => Promise<void>;
   selectedTransaction: Transaction | null;
 }
 
-const TransactionForm = ({ currentDay, storeTransactions, selectedTransaction }: TransactionFormProps) => {
+const TransactionForm = ({ currentDay, storeTransactions, updateTransactions, selectedTransaction }: TransactionFormProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const { 
     register, 
@@ -33,7 +34,7 @@ const TransactionForm = ({ currentDay, storeTransactions, selectedTransaction }:
     }
   });
   const currentType = watch('type');
-  const fontsizeCss = { '& input': { fontSize: 12 }, '& label': { fontSize: 14 } }
+  const fontsizeCss = { '& input': { fontSize: 15 }, '& label': { fontSize: 14 }, '.MuiSelect-select': {fontSize: 15} }
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -55,7 +56,12 @@ const TransactionForm = ({ currentDay, storeTransactions, selectedTransaction }:
   }, [currentDay]);
 
   const onSubmit: SubmitHandler<TransactionFormSchemaType> = (data) => {
-    storeTransactions(data);
+    if(selectedTransaction) {
+      updateTransactions(data, selectedTransaction.id);
+    }else {
+      storeTransactions(data);
+    }
+
     reset({
       type: 'expense',
       date: currentDay,
@@ -64,7 +70,7 @@ const TransactionForm = ({ currentDay, storeTransactions, selectedTransaction }:
       category_id: 0
     });
   }
-console.log(errors)
+
   const toggleType = (currentType: TransactionType) => {
     setValue('type', currentType);
   }
@@ -169,7 +175,9 @@ console.log(errors)
           />
           {errors.content?.message && (<Typography color='error' fontSize={12}>{errors.content?.message}</Typography>)}
 
-          <Button type="submit" variant="contained" color={currentType === 'expense' ? 'error': 'primary'}>送信</Button>
+          <Button type="submit" variant="contained" color={currentType === 'expense' ? 'error': 'primary'}>
+            {selectedTransaction ? '更新' :'保存'}
+          </Button>
         </Stack>
       </Box>
     </Box>

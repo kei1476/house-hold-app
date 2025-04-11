@@ -19,7 +19,6 @@ interface CalenderProps {
 const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setCurrentDay}: CalenderProps) => {
 	const dailyTransactions = calculateDailyTransactions(monthlyTransactions);
 
-	console.log(dailyTransactions)
 	const createCalenderEvent = (dailyTransactions: Record<string,Balance>): CalenderEvent[] => {
 		const days = Object.keys(dailyTransactions);
 		return days.map((day) => {

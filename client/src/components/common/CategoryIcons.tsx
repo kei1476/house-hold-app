@@ -8,13 +8,13 @@ import WorkIcon from "@mui/icons-material/Work";
 import { JSX } from "react";
 
 const IconComponents: Record<string, JSX.Element> = {
-  食費: <RestaurantIcon fontSize="small" />,
-  日用品: <AlarmIcon fontSize="small" />,
-  住居費: <AddHomeIcon fontSize="small" />,
-  交際費: <Diversity3Icon fontSize="small" />,
-  娯楽: <SportsTennisIcon fontSize="small" />,
-  交通費: <TrainIcon fontSize="small" />,
-  給与: <WorkIcon fontSize="small" />,
+  食費: <RestaurantIcon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
+  日用品: <AlarmIcon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
+  住居費: <AddHomeIcon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
+  交際費: <Diversity3Icon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
+  娯楽: <SportsTennisIcon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
+  交通費: <TrainIcon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
+  給与: <WorkIcon fontSize="small" sx={{ verticalAlign: 'middle' ,mr:1 }} />,
 };
 
 export default IconComponents;

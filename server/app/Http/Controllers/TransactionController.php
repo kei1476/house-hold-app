@@ -45,7 +45,6 @@ class TransactionController extends Controller
         $requestPram = $request->get('params');
         $newTransaction = Transaction::create($requestPram['transaction']);
         $newTransaction->load('category');
-        Log::debug($newTransaction);
 
         $res = [
             'id' => $newTransaction->id,
@@ -63,9 +62,25 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $transaction = Transaction::find($id);
+        $attributes = $request->all();
+        $transaction->update($attributes['params']['transaction']);
+
+        $transaction->load('category');
+        Log::debug(Carbon::parse($transaction->date)->format('Y-m-d H:i:s'));
+        $res = [
+            'id' => $transaction->id,
+            'type' => $transaction->type,
+            'date' => Carbon::parse($transaction->date)->format('Y-m-d H:i:s'),
+            'amount' => $transaction->amount,
+            'content' => $transaction->content,
+            'category_id' => $transaction->category->id,
+            'category_name' => $transaction->category->name
+        ];
+Log::debug($res);
+        return $res;
     }
 
     /**

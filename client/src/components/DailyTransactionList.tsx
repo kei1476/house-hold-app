@@ -18,8 +18,13 @@ const DailyTransactionList = ({dailyTransactions, onSelectTransaction, deleteTra
               dailyTransactions.map((dailyTransaction: Transaction) => (
                 <ListItem  sx={{ width: '100%', display:'inline-block', backgroundColor:(theme) => dailyTransaction.type === 'expense' ? theme.palette.expenseColor.light : theme.palette.incomeColor.light, p:2, borderRadius: '4px', boxShadow: 1,position: 'relative'}} >
                   <Grid2 container alignItems={'center'} onClick={() => onSelectTransaction(dailyTransaction)}>
-                    <Grid2 spacing={2} flexGrow={1}>
-                      {IconComponents[dailyTransaction.category_name]}{dailyTransaction.category_name}
+                    <Grid2 spacing={2} flexGrow={1} sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography>
+                        {IconComponents[dailyTransaction.category_name]}
+                      </Typography>
+                      <Typography>
+                        {dailyTransaction.category_name}
+                      </Typography>
                     </Grid2>
                     <Grid2 spacing={2} flexGrow={2}>
                       <Typography>{dailyTransaction.content}</Typography>
