@@ -24,11 +24,7 @@ function App() {
           currentMonth: format(currentMonth, 'yyyy-MM')
         }
         const res = await backendAxios.get('transaction/currentMonth/', {params});
-        const test = res.data.map((transaction: Transaction) => {
-          transaction.date = format(transaction.date, 'yyyy-MM-dd');
-          return transaction
-        })
-        setMonthlyTransactions(test);
+        setMonthlyTransactions(res.data.data);
       } catch(err) {
         console.error(err);
       }
@@ -39,12 +35,8 @@ function App() {
 
   const storeTransactions = async (transaction: TransactionFormSchemaType) => {
     try {
-      const params = {
-        transaction: transaction
-      }
-      const res = await backendAxios.post('transaction', {params});
-      res.data.date = format(res.data.date, 'yyyy-MM-dd');
-      setMonthlyTransactions((prevTransactions) => [...prevTransactions, res.data]);
+      const res = await backendAxios.post('transaction', {transaction});
+      setMonthlyTransactions((prevTransactions) => [...prevTransactions, res.data.data]);
     } catch(err) {
       console.error(err);
     }
@@ -53,14 +45,11 @@ function App() {
   const updateTransactions = async (transaction: TransactionFormSchemaType, transactionId: number) => {
     try {
       if(!transactionId) throw new Error('idが存在しません');
-      const params = {
-        transaction: transaction
-      }
-      const res = await backendAxios.put(`transaction/${transactionId}`, {params});
-      res.data.date = format(res.data.date, 'yyyy-MM-dd');
+      const res = await backendAxios.put(`transaction/${transactionId}`, {transaction});
       const updatedTransactions = monthlyTransactions.map((monthlyTransaction): Transaction => {
-        return monthlyTransaction.id === transactionId ? {...monthlyTransaction, ...res.data} : monthlyTransaction;
+        return monthlyTransaction.id === transactionId ? {...monthlyTransaction, ...res.data.data} : monthlyTransaction;
       })
+
       setMonthlyTransactions(updatedTransactions);
     } catch(err) {
       console.error(err);

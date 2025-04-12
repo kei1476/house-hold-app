@@ -13,6 +13,7 @@ class Transaction extends Model
     protected $table = 'transactions';
 
 	protected $casts = [
+		'id' => 'int',
 		'category_id' => 'int',
 		'amount' => 'int',
 		'date' => 'datetime:yyyy-MM-dd',
