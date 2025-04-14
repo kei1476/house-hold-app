@@ -1,11 +1,12 @@
 import { LinearProgress, Typography } from "@mui/material";
 
 interface UsageBarProps {
+  label: string;
   usage: number;
   defaultColor: "inherit" | "error" | "primary" | "secondary" | "info" | "success" | "warning";
 }
 
-const UsageBar = ({usage, defaultColor}: UsageBarProps) => {
+const UsageBar = ({label, usage, defaultColor}: UsageBarProps) => {
   return (
       <>
         <Typography
@@ -16,7 +17,7 @@ const UsageBar = ({usage, defaultColor}: UsageBarProps) => {
             fontSize: { xs: ".6rem", sm: ".8rem" },
           }}
         >
-          予算使用率{usage}%
+          {`${label}.${usage}%`}
         </Typography>
         <LinearProgress
           variant="determinate"
@@ -25,7 +26,6 @@ const UsageBar = ({usage, defaultColor}: UsageBarProps) => {
           sx={{
             height: 8,
             borderRadius: 1,
-            color: (theme) => theme.palette.usageColor.main,
           }}
         />
       </>

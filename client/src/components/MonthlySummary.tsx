@@ -3,6 +3,7 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import FlagIcon from '@mui/icons-material/Flag';
 import SavingsIcon from '@mui/icons-material/Savings';
+import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
 import { Transaction } from "../types";
 import { calculateTransactions } from "../utils/calculateTransactions";
 import SummaryDetail from "./SummaryDetail";
@@ -39,7 +40,7 @@ const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
           </Box>
 
           <Box sx={{ px: { xs: 1, sm: 2 } }}>
-            <UsageBar usage={expenseUsage} defaultColor={"primary"} />
+            <UsageBar label='支出率' usage={expenseUsage} defaultColor={"info"} />
           </Box>
         </Box>
       </Grid2>
@@ -57,11 +58,11 @@ const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
             <Box component={'span'} sx={{ fontSize: '40px', mt:2 }}>=</Box>
 
             {/* 使える額 */}
-            <SummaryDetail color={budget - expense >= 0 ? 'black' : theme.palette.expenseColor.main} title={'使える額'} amount={budget - expense} Icon={NorthEastIcon} />
+            <SummaryDetail color={budget - expense >= 0 ? theme.palette.usageColor.main : theme.palette.expenseColor.main} title={'使える額'} amount={budget - expense} Icon={BatteryAlertIcon} />
           </Box>
 
           <Box sx={{ px: { xs: 1, sm: 2 } }}>
-            <UsageBar usage={budgetUsage} defaultColor="secondary" />
+            <UsageBar label='予算使用率' usage={budgetUsage} defaultColor="warning" />
           </Box>
         </Box>
       </Grid2>
