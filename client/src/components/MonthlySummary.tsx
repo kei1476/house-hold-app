@@ -1,10 +1,12 @@
-import { Box, Grid2, LinearProgress, Stack, Typography, useTheme } from "@mui/material"
+import { Box, Grid2, Typography, useTheme } from "@mui/material"
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import FlagIcon from '@mui/icons-material/Flag';
 import SavingsIcon from '@mui/icons-material/Savings';
 import { Transaction } from "../types";
 import { calculateTransactions } from "../utils/calculateTransactions";
+import SummaryDetail from "./SummaryDetail";
+import UsageBar from "./UsageBar";
 interface MonthlySummaryProps {
 	monthlyTransactions: Transaction[];
 }
@@ -21,182 +23,45 @@ const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
       <Grid2 size={6} display={"flex"} flexDirection={"column"}>
         <Typography variant="h6" fontWeight={"fontWeightBold"} textAlign={'center'}>今月の収支</Typography>
         <Box sx={{ border: '1px solid', borderRadius: "10px", bgcolor: 'white', p: 1 }}>
-          <Box sx={{ 
-            color: "black", 
-            flexGrow: 1, 
-            alignItems: 'center',
-            display: 'flex',
-          }}>
+          <Box sx={{ color: "black", flexGrow: 1, alignItems: 'center',display: 'flex'}}>
             {/* 収入 */}
-            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column' }}>
-              <Stack direction={"row"} sx={{ color: (theme) => theme.palette.incomeColor.main }}>
-                <NorthEastIcon sx={{ fontSize:"1.6rem" }} />
-                <Typography fontWeight={"fontWeightBold"} mr={1}>収入</Typography>
-              </Stack>
-                <Typography 
-                  textAlign={"right"} 
-                  variant="h5" 
-                  fontWeight={"fontWeightBold"} 
-                  sx={{ 
-                    wordBreak:"break-word", 
-                    fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
-                  }}
-                  display={'block'}
-                >
-                  ¥{income}
-                </Typography>
-            </Box>
+            <SummaryDetail color={theme.palette.incomeColor.main} title={'収入'} amount={income} Icon={NorthEastIcon} />
 
             <Box component={'span'} sx={{ fontSize: '40px', mt:2  }}>−</Box>
 
             {/* 支出 */}
-            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column' }}>
-              <Stack direction={"row"} sx={{ color: (theme) => theme.palette.expenseColor.main }}>
-                <SouthEastIcon sx={{ fontSize:"1.6rem"}} />
-                <Typography fontWeight={"fontWeightBold"} mr={1}>支出</Typography>
-              </Stack>
-              <Typography 
-                textAlign={"right"} 
-                variant="h5" 
-                fontWeight={"fontWeightBold"} 
-                sx={{ 
-                  wordBreak:"break-word", 
-                  fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
-                }}
-              >
-                ¥{expense}
-              </Typography>
-            </Box>
+            <SummaryDetail color={theme.palette.expenseColor.main} title={'支出'} amount={expense} Icon={SouthEastIcon} />
 
             <Box component={'span'} sx={{ fontSize: '40px', mt:2 }}>=</Box>
 
             {/* 残高 */}
-            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column' }}>
-              <Stack direction={"row"} sx={{  color: (theme) => theme.palette.balanceColor.main }}>
-                <SavingsIcon sx={{ fontSize:"1.6rem" }} />
-                <Typography fontWeight={"fontWeightBold"} mr={1}>残高</Typography>
-              </Stack>
-              <Typography 
-                textAlign={"right"} 
-                variant="h5" 
-                fontWeight={"fontWeightBold"} 
-                sx={{ 
-                  wordBreak:"break-word", 
-                  fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
-                }}
-              >
-                ¥{balance}
-              </Typography>
-            </Box>
+            <SummaryDetail color={theme.palette.balanceColor.main} title={'残高'} amount={balance} Icon={SavingsIcon} /> 
           </Box>
-          <Box sx={{ px:{xs: 1, sm: 2} }}>
-            <Typography 
-              variant="h5" 
-              fontWeight={"fontWeightBold"} 
-              sx={{ 
-                wordBreak:"break-word", 
-                fontSize: {xs:".6rem",sm:".8rem"},
-              }}
-            >
-              支出率{expenseUsage}%
-            </Typography>
-            <LinearProgress 
-              variant="determinate" 
-              color={ expenseUsage >= 90 ? 'error' : 'primary'} 
-              value={expenseUsage >= 100 ? 100 : expenseUsage} 
-              sx={{height: 8, borderRadius: 1,  color: (theme) => theme.palette.usageColor.main}}
-            />
+
+          <Box sx={{ px: { xs: 1, sm: 2 } }}>
+            <UsageBar usage={expenseUsage} defaultColor={"primary"} />
           </Box>
         </Box>
       </Grid2>
 
       <Grid2 size={6} display={"flex"} flexDirection={"column"}>
-        {/* 予算 */}
         <Typography variant="h6" fontWeight={"fontWeightBold"}  textAlign={'center'}>今月の使用状況</Typography>
         <Box sx={{ border: '1px solid', borderRadius: "10px", bgcolor: 'white', p: 1 }}>
-          <Box sx={{ 
-            color: "black", 
-            flexGrow: 1, 
-            alignItems: 'center',
-            display: 'flex',
-          }}>
+          <Box sx={{ color: "black", flexGrow: 1, alignItems: 'center',display: 'flex'}}>
             {/* 予算 */}
-            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column'}}>
-              <Stack direction={"row"} sx={{ color: (theme) => theme.palette.budgetColor.main }}>
-                <FlagIcon sx={{ fontSize:"1.6rem" }} />
-                <Typography fontWeight={"fontWeightBold"} mr={1}>予算</Typography>
-              </Stack>
-                <Typography 
-                  textAlign={"right"} 
-                  variant="h5" 
-                  fontWeight={"fontWeightBold"} 
-                  sx={{ 
-                    wordBreak:"break-word", 
-                    fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
-                  }}
-                  display={'block'}
-                >
-                  ¥{budget}
-                </Typography>
-            </Box>
-
+            <SummaryDetail color={theme.palette.budgetColor.main} title={'予算'} amount={budget} Icon={FlagIcon} />
             <Box component={'span'} sx={{ fontSize: '40px', mt:2 }}>−</Box>
 
             {/* 支出 */}
-            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column' }}>
-              <Stack direction={"row"} sx={{ color: (theme) => theme.palette.expenseColor.main }}>
-                <SouthEastIcon sx={{ fontSize:"1.6rem"}} />
-                <Typography fontWeight={"fontWeightBold"} mr={1}>支出</Typography>
-              </Stack>
-              <Typography 
-                textAlign={"right"} 
-                variant="h5" 
-                fontWeight={"fontWeightBold"} 
-                sx={{ 
-                  wordBreak:"break-word", 
-                  fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
-                }}
-              >
-                ¥{expense}
-              </Typography>
-            </Box>
-
+            <SummaryDetail color={theme.palette.expenseColor.main} title={'支出'} amount={expense} Icon={SouthEastIcon} />
             <Box component={'span'} sx={{ fontSize: '40px', mt:2 }}>=</Box>
 
-            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column'}}>
-              <Typography fontWeight={"fontWeightBold"} mr={1}>使える額</Typography>
-                <Typography 
-                  textAlign={"right"} 
-                  variant="h5" 
-                  fontWeight={"fontWeightBold"} 
-                  sx={{ 
-                    wordBreak:"break-word", 
-                    fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"},
-                    mr: {xs: 1, sm: 2},
-                    color: budget - expense >= 0 ? 'black' : theme.palette.expenseColor.main
-                  }}
-                >
-                  ¥{budget - expense}
-              </Typography>
-            </Box>
+            {/* 使える額 */}
+            <SummaryDetail color={budget - expense >= 0 ? 'black' : theme.palette.expenseColor.main} title={'使える額'} amount={budget - expense} Icon={NorthEastIcon} />
           </Box>
-          <Box sx={{ px:{xs: 1, sm: 2} }}>
-            <Typography 
-              variant="h5" 
-              fontWeight={"fontWeightBold"} 
-              sx={{ 
-                wordBreak:"break-word", 
-                fontSize: {xs:".6rem",sm:".8rem"},
-              }}
-            >
-              予算使用率{budgetUsage}%
-            </Typography>
-            <LinearProgress 
-              variant="determinate" 
-              color={ budgetUsage >= 90 ? 'error' : 'secondary'} 
-              value={budgetUsage >= 100 ? 100 : budgetUsage} 
-              sx={{height: 8, borderRadius: 1,  color: (theme) => theme.palette.usageColor.main}}
-            />
+
+          <Box sx={{ px: { xs: 1, sm: 2 } }}>
+            <UsageBar usage={budgetUsage} defaultColor="secondary" />
           </Box>
         </Box>
       </Grid2>

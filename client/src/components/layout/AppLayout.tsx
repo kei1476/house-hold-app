@@ -92,8 +92,6 @@ export default function AppLayout() {
       <AppBar
         position="fixed"
         sx={{
-          // width: { md: `calc(100% - ${drawerWidth}px)` },
-          // ml: { md: `${drawerWidth}px` },
           bgcolor: (theme) => theme.palette.pageColor.light, 
           color: 'black'
         }}
@@ -103,7 +101,6 @@ export default function AppLayout() {
             家計簿アプリ
           </Typography>
           {MenuItems.map((item, index) => (
-            // isActiveはNavLinkが持っている値
             <NavLink key={index} to={item.path} style={({isActive}) => {
               return {
                 ...baseLinkStyle,
