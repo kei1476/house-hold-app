@@ -8,7 +8,7 @@ import Report from './pages/Analysis';
 import NoMatch from './pages/NoMatch';
 import { theme } from './theme/theme';
 import { useEffect, useState } from 'react';
-import { Transaction } from './types';
+import { Budget, Transaction } from './types';
 import { backendAxios } from './lib/backendAxios';
 import { format } from "date-fns";
 import { TransactionFormSchemaType } from './validations';
@@ -16,6 +16,7 @@ import { TransactionFormSchemaType } from './validations';
 function App() {
   const [monthlyTransactions, setMonthlyTransactions] = useState<Transaction[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [budget, setBudget] = useState<Budget | undefined>(undefined);
 
   useEffect(() => {
     const fetchMonthlyTransactions = async () => {
@@ -25,6 +26,8 @@ function App() {
         }
         const res = await backendAxios.get('transaction/currentMonth/', {params});
         setMonthlyTransactions(res.data.data);
+
+        getMonthlyBudget();
       } catch(err) {
         console.error(err);
       }
@@ -66,6 +69,34 @@ function App() {
     }
   }
 
+  const getMonthlyBudget = async () => {
+    try {
+      const params = {
+        currentMonth: format(currentMonth, 'yyyy-MM')
+      }
+      const res = await backendAxios.get(`budget/currentMonth`, {params});
+
+      setBudget(res.data.data);
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  const storeUpdateBudget = async (budgetAmount: number, id: number | null = null) => {
+    try {
+      const params = {
+        id, 
+        budgetAmount,
+        currentMonth: format(currentMonth, 'yyyy-MM')
+      }
+      const res = await backendAxios.post('budget', params);
+      const newBudget = res.data.data
+      setBudget(newBudget);
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   return (
       <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -79,6 +110,8 @@ function App() {
                       storeTransactions={storeTransactions}
                       updateTransactions={updateTransactions}
                       deleteTransactions={deleteTransactions}
+                      budget={budget}
+                      storeUpdateBudget={storeUpdateBudget}
                     /> 
                   } />
                 <Route path='/report' element={ <Report /> } />

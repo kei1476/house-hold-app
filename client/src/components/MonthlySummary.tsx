@@ -1,23 +1,42 @@
-import { Box, Grid2, Typography, useTheme } from "@mui/material"
+import { Box, Grid2, IconButton, Stack, TextField, Typography, useTheme } from "@mui/material"
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import FlagIcon from '@mui/icons-material/Flag';
 import SavingsIcon from '@mui/icons-material/Savings';
 import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
-import { Transaction } from "../types";
+import EditIcon from "@mui/icons-material/Edit";
+import { Budget, Transaction } from "../types";
 import { calculateTransactions } from "../utils/calculateTransactions";
 import SummaryDetail from "./SummaryDetail";
 import UsageBar from "./UsageBar";
+import { useEffect, useState } from "react";
 interface MonthlySummaryProps {
 	monthlyTransactions: Transaction[];
+  budget: Budget | undefined;
+  storeUpdateBudget: (budgetAmount: number, id?: number | null) => Promise<void>;
 }
 
-const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
+const MonthlySummary = ({ monthlyTransactions, budget, storeUpdateBudget }: MonthlySummaryProps) => {
   const theme = useTheme();
 	const {income, expense, balance} = calculateTransactions(monthlyTransactions);
-  const budget = 10000;
-  const budgetUsage = Number((100 - (((budget - expense) / budget) * 100)).toFixed(1));
-  const expenseUsage = Number(((expense/income) * 100).toFixed(1));
+  const budgetAmount = budget?.budget_amount ?? 0;
+  const budgetUsage = budgetAmount === 0 ? 0 : Number((100 - (((budgetAmount - expense) / budgetAmount) * 100)).toFixed(1));
+  const expenseUsage = budgetAmount === 0 ? 0 : Number(((expense/income) * 100).toFixed(1));
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(budgetAmount ?? 0);
+
+  const handleEditClick = () => {
+    setIsEditing(!isEditing)
+  }
+
+  const handleSave = () => {
+    setIsEditing(!isEditing)
+    storeUpdateBudget(Number(inputValue), budget?.id);
+  }
+
+  useEffect(() => {    
+    setInputValue(budgetAmount);
+  }, [budgetAmount]);
 
   return (
     <Grid2 container spacing={{ xs:1, sm:2 }} mb={2} sx={{ p:1 }}>
@@ -50,7 +69,55 @@ const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
         <Box sx={{ border: '1px solid', borderRadius: "10px", bgcolor: 'white', p: 1 }}>
           <Box sx={{ color: "black", flexGrow: 1, alignItems: 'center',display: 'flex'}}>
             {/* 予算 */}
-            <SummaryDetail color={theme.palette.budgetColor.main} title={'予算'} amount={budget} Icon={FlagIcon} />
+            {/* <SummaryDetail color={theme.palette.budgetColor.main} title={'予算'} amount={budget} Icon={FlagIcon} /> */}
+            <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column' }}>
+              <Stack direction={"row"} sx={{ color: theme.palette.budgetColor.main }}>
+                <FlagIcon />
+                <Typography fontWeight={"fontWeightBold"} mr={1}>予算</Typography>
+              </Stack>
+              {
+                isEditing ? (
+                  <TextField
+                    name="budget"
+                    variant="standard"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(Number(e.target.value))}
+                    onBlur={handleSave}
+                    size="small"
+                    autoFocus
+                    sx={{
+                      p: 0,
+                      fontSize: 12,
+                      fontWeight: "bold",
+                      maxWidth: "120px",
+                      textAlign: "right",
+                    }}
+                  />
+                ) : (
+                  <Box component={'div'} sx={{ position: 'relative' }}>
+                    <Typography 
+                      textAlign={"right"} 
+                      variant="h5" 
+                      fontWeight={"fontWeightBold"} 
+                      sx={{ 
+                        wordBreak:"break-word", 
+                        fontSize: {xs:".8rem",sm:"1rem", md:"1.2rem"} 
+                      }}
+                    >
+                      ¥{budgetAmount}
+                    </Typography>
+                    <IconButton
+                      onClick={handleEditClick}
+                      size="small"
+                      sx={{ position: "absolute", top: '-10px', right: '-28px' }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                  )
+              }
+            </Box>
+  
             <Box component={'span'} sx={{ fontSize: '40px', mt:2 }}>−</Box>
 
             {/* 支出 */}
@@ -58,7 +125,7 @@ const MonthlySummary = ({ monthlyTransactions }: MonthlySummaryProps) => {
             <Box component={'span'} sx={{ fontSize: '40px', mt:2 }}>=</Box>
 
             {/* 使える額 */}
-            <SummaryDetail color={budget - expense >= 0 ? theme.palette.usageColor.main : theme.palette.expenseColor.main} title={'使える額'} amount={budget - expense} Icon={BatteryAlertIcon} />
+            <SummaryDetail color={budgetAmount - expense >= 0 ? theme.palette.usageColor.main : theme.palette.expenseColor.main} title={'使える額'} amount={budgetAmount - expense} Icon={BatteryAlertIcon} />
           </Box>
 
           <Box sx={{ px: { xs: 1, sm: 2 } }}>

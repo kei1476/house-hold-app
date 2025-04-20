@@ -24,7 +24,7 @@ class TransactionController extends Controller
             ->whereBetween('date', [$start, $end])
             ->get();
 
-        return TransactionResource::collection($transactions);;
+        return TransactionResource::collection($transactions);
     }
 
     /**

@@ -16,6 +16,12 @@ export interface Category {
   name: string;
 }
 
+export interface Budget {
+  id: number;
+  target_month: string;
+  budget_amount: number;
+}
+
 export interface Balance {
   income: number;
   expense: number;
