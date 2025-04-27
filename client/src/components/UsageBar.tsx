@@ -17,7 +17,7 @@ const UsageBar = ({label, usage, defaultColor}: UsageBarProps) => {
             fontSize: { xs: ".6rem", sm: ".8rem" },
           }}
         >
-          {`${label}.${usage}%`}
+          {`${label}:${usage}%`}
         </Typography>
         <LinearProgress
           variant="determinate"

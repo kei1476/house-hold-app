@@ -64,7 +64,7 @@ export default function AppLayout() {
     },
     {
       text: '分析',
-      path: '/report',
+      path: '/analysis',
       icon: EqualizerIcon
     },
   ]

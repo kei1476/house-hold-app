@@ -28,9 +28,7 @@ class BudgetStoreUpdateAction extends Controller
         ];
 
         $id = (int)$request->input('id');
-// Log::debug('ID: ' . $id);
-Log::debug($request->input('currentMonth'));
-Log::debug(Carbon::parse($request->input('currentMonth'))->firstOfMonth()->format('Y-m-d'));
+
         if($id === 0) {
             $newBudget = $budgetService->store($attributes);
         }else {

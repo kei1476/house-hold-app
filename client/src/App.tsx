@@ -4,7 +4,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import AppLayout from './components/layout/AppLayout';
 import Home from './pages/Home';
-import Report from './pages/Analysis';
+import Analysis from './pages/Analysis';
 import NoMatch from './pages/NoMatch';
 import { theme } from './theme/theme';
 import { useEffect, useState } from 'react';
@@ -114,7 +114,13 @@ function App() {
                       storeUpdateBudget={storeUpdateBudget}
                     /> 
                   } />
-                <Route path='/report' element={ <Report /> } />
+                <Route path='/analysis' element={
+                  <Analysis 
+                    currentMonth={currentMonth}
+                    setCurrentMonth={setCurrentMonth} 
+                    monthlyTransactions={monthlyTransactions}
+                  /> 
+                } />
                 <Route path='/*' element={ <NoMatch /> } />
               </Route>
             </Routes>
