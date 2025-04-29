@@ -1,19 +1,19 @@
 import { Box, Button, ButtonGroup, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { backendAxios } from '../lib/backendAxios'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Category, Transaction, TransactionType } from '../types';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TransactionFormSchema, TransactionFormSchemaType } from '../validations';
+import { AppContext, useAppContext } from '../contexts/AppContext';
 
 interface TransactionFormProps {
   currentDay: string;
-  storeTransactions: (transaction: TransactionFormSchemaType) => Promise<void>;
-  updateTransactions: (transaction: TransactionFormSchemaType, id: number) => Promise<void>;
   selectedTransaction: Transaction | null;
 }
 
-const TransactionForm = ({ currentDay, storeTransactions, updateTransactions, selectedTransaction }: TransactionFormProps) => {
+const TransactionForm = ({ currentDay, selectedTransaction }: TransactionFormProps) => {
+  const { updateTransactions, storeTransactions } = useAppContext();
   const [categories, setCategories] = useState<Category[]>([]);
   const { 
     register, 

@@ -5,18 +5,14 @@ import FlagIcon from '@mui/icons-material/Flag';
 import SavingsIcon from '@mui/icons-material/Savings';
 import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
 import EditIcon from "@mui/icons-material/Edit";
-import { Budget, Transaction } from "../types";
 import { calculateTransactions } from "../utils/calculateTransactions";
 import SummaryDetail from "./SummaryDetail";
 import UsageBar from "./UsageBar";
 import { useEffect, useState } from "react";
-interface MonthlySummaryProps {
-	monthlyTransactions: Transaction[];
-  budget: Budget | undefined;
-  storeUpdateBudget: (budgetAmount: number, id?: number | null) => Promise<void>;
-}
+import { useAppContext } from "../contexts/AppContext";
 
-const MonthlySummary = ({ monthlyTransactions, budget, storeUpdateBudget }: MonthlySummaryProps) => {
+const MonthlySummary = () => {
+  const {monthlyTransactions, budget, storeUpdateBudget} = useAppContext();
   const theme = useTheme();
 	const {income, expense, balance} = calculateTransactions(monthlyTransactions);
   const budgetAmount = budget?.budget_amount ?? 0;

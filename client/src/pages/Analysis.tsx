@@ -1,17 +1,12 @@
 import { Grid2, Paper } from '@mui/material'
-import React from 'react'
 import PieChart from '../components/pages/analysis/PieChart'
 import Ranking from '../components/pages/analysis/Ranking'
 import BarChart from '../components/pages/analysis/BarChart'
 import MonthlyDatePicker from '../components/pages/analysis/MonthlyDatePicker'
-import { Transaction } from '../types'
+import { useAppContext } from '../contexts/AppContext'
 
-interface AnalysisProps {
-  currentMonth: Date;
-  setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
-  monthlyTransactions: Transaction[];
-}
-const Analysis = ({currentMonth, setCurrentMonth, monthlyTransactions}: AnalysisProps) => {
+const Analysis = () => {
+  const {currentMonth, setCurrentMonth} = useAppContext()
   const commonPaperStyle = {
     height: { xs: 'auto', md: '400px' },
     display: 'flex',
@@ -29,7 +24,7 @@ const Analysis = ({currentMonth, setCurrentMonth, monthlyTransactions}: Analysis
 			{/* カテゴリ別円グラフ */}
 			<Grid2 size={5}>
         <Paper sx={commonPaperStyle}>
-          <PieChart monthlyTransactions={monthlyTransactions}/>
+          <PieChart />
         </Paper>
 			</Grid2>
 			{/* ランキング */}

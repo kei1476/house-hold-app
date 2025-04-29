@@ -2,15 +2,12 @@ import React, { useState } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { Box, MenuItem, TextField, Typography } from '@mui/material';
-import { Transaction } from '../../../types';
+import { useAppContext } from '../../../contexts/AppContext';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface PieChartProps {
-  monthlyTransactions: Transaction[];
-}
-
-const PieChart = ({monthlyTransactions}: PieChartProps) => {
+const PieChart = () => {
+  const {monthlyTransactions} = useAppContext();
   const [currentType, setCurrentType] = useState('expense');
 
   const options = {

@@ -7,17 +7,17 @@ import { calculateDailyTransactions } from '../utils/calculateTransactions'
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { theme } from '../theme/theme'
 import { isSameMonth } from 'date-fns'
+import { useAppContext } from '../contexts/AppContext'
 
 interface CalenderProps {
 	today: string;
 	currentDay: string;
-	monthlyTransactions: Transaction[];
-	setCurrentMonth: React.Dispatch<React.SetStateAction<Date>>;
 	setCurrentDay: React.Dispatch<React.SetStateAction<string>>;
 	setSelectedTransaction: React.Dispatch<React.SetStateAction<Transaction | null>>;
 }
 
-const Calender = ({today, currentDay, monthlyTransactions, setCurrentMonth, setCurrentDay, setSelectedTransaction}: CalenderProps) => {
+const Calender = ({today, currentDay, setCurrentDay, setSelectedTransaction}: CalenderProps) => {
+	const {monthlyTransactions, setCurrentMonth} = useAppContext();
 	const dailyTransactions = calculateDailyTransactions(monthlyTransactions);
 
 	const createCalenderEvent = (dailyTransactions: Record<string,Balance>): CalenderEvent[] => {
