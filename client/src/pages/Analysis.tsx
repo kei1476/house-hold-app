@@ -35,7 +35,7 @@ const Analysis = () => {
       </Grid2>
 			{/* 日別の棒グラフ */}
 			<Grid2 size={12}>
-        <Paper sx={commonPaperStyle}>
+        <Paper sx={{ height: { xs: 'auto', md: '400px' } }}>
           <BarChart />
         </Paper>
       </Grid2>
