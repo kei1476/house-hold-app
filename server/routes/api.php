@@ -2,19 +2,23 @@
 
 use App\Http\Actions\Budget\BudgetStoreUpdateAction;
 use App\Http\Actions\Budget\GetMonthlyBudgetAction;
+use App\Http\Actions\Category\CategoryIndexAction;
+use App\Http\Actions\Transaction\TransactionDestroyAction;
+use App\Http\Actions\Transaction\TransactionIndexAction;
+use App\Http\Actions\Transaction\TransactionStoreAction;
+use App\Http\Actions\Transaction\TransactionUpdateAction;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('transaction')->group(function () {
-    Route::get('/currentMonth', [TransactionController::class, 'index']);
-    Route::post('/', [TransactionController::class, 'store']);
-    Route::put('/{id}', [TransactionController::class, 'update']);
-    Route::delete('/{id}', [TransactionController::class, 'destroy']);
+    Route::get('/currentMonth', TransactionIndexAction::class);
+    Route::post('/', TransactionStoreAction::class);
+    Route::put('/{id}', TransactionUpdateAction::class);
+    Route::delete('/{id}', TransactionDestroyAction::class);
 });
 
 Route::prefix('category')->group(function () {
-    Route::get('/', [CategoryController::class, 'index']);
+    Route::get('/', CategoryIndexAction::class);
 });
 
 Route::prefix('budget')->group(function () {

@@ -28,7 +28,7 @@ const BarChart = () => {
   const labels = Object.keys(dailyTransactions);
   const expense = Object.values(dailyTransactions).map((transaction) => transaction.expense);
   const income = Object.values(dailyTransactions).map((transaction) => transaction.income);
-console.log(monthlyTransactions);
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
