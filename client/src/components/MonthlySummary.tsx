@@ -12,18 +12,17 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../contexts/AppContext";
 
 const MonthlySummary = () => {
-  const {monthlyTransactions, budget, storeUpdateBudget} = useAppContext();
   const theme = useTheme();
-	const {income, expense, balance} = calculateTransactions(monthlyTransactions);
-  const budgetAmount = budget?.budget_amount ?? 0;
-  const budgetUsage = budgetAmount === 0 ? 0 : Number((100 - (((budgetAmount - expense) / budgetAmount) * 100)).toFixed(1));
-  const expenseUsage = budgetAmount === 0 ? 0 : Number(((expense/income) * 100).toFixed(1));
+  const {monthlyTransactions, budget, storeUpdateBudget} = useAppContext();
   const [isEditing, setIsEditing] = useState(false);
+  const budgetAmount = budget?.budget_amount ?? 0;
   const [inputValue, setInputValue] = useState(budgetAmount ?? 0);
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing)
-  }
+	const {income, expense, balance} = calculateTransactions(monthlyTransactions);
+  const budgetUsage = budgetAmount === 0 ? 0 : Number((100 - (((budgetAmount - expense) / budgetAmount) * 100)).toFixed(1));
+  const expenseUsage = income === 0 ? 0 : Number(((expense/income) * 100).toFixed(1));
+
+  const handleEditClick = () => setIsEditing(!isEditing);
 
   const handleSave = () => {
     setIsEditing(!isEditing)
@@ -65,7 +64,6 @@ const MonthlySummary = () => {
         <Box sx={{ border: '1px solid', borderRadius: "10px", bgcolor: 'white', p: 1 }}>
           <Box sx={{ color: "black", flexGrow: 1, alignItems: 'center',display: 'flex'}}>
             {/* 予算 */}
-            {/* <SummaryDetail color={theme.palette.budgetColor.main} title={'予算'} amount={budget} Icon={FlagIcon} /> */}
             <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center', flexDirection: 'column' }}>
               <Stack direction={"row"} sx={{ color: theme.palette.budgetColor.main }}>
                 <FlagIcon />

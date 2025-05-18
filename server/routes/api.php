@@ -7,7 +7,6 @@ use App\Http\Actions\Transaction\TransactionDestroyAction;
 use App\Http\Actions\Transaction\TransactionIndexAction;
 use App\Http\Actions\Transaction\TransactionStoreAction;
 use App\Http\Actions\Transaction\TransactionUpdateAction;
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('transaction')->group(function () {
