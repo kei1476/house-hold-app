@@ -1,0 +1,23 @@
+version: "3"
+services: 
+  db:
+    image: mariadb:10.4
+    container_name: "household-app-db"
+    volumes:
+      - ./docker/data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: "household_app_2"
+      MYSQL_USER: "household-app-2-user"
+      MYSQL_PASSWORD: "household-app-2-password"
+  php:
+    build: ./docker/php
+    container_name: "household-app-php"
+    volumes:
+      - ./server:/var/www/html
+      - ./docker/php/vhost.conf:/etc/apache2/conf-enabled/vhost.conf
+    ports:
+      - "8080:80"
