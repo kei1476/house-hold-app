@@ -59,19 +59,19 @@ const PieChart = () => {
           <MenuItem value={'expense'}>支出</MenuItem>
         </TextField>
         <Box
-    sx={{
-      width: { xs: 200, md: 300 },
-      height: { xs: 200, md: 300 },
-    }}
-  >
-    {
-      monthlyTransactions.length !== 0 ? (
-        <Pie data={data} options={options} />
-      ) : (
-        <Typography sx={{ mt: 2, textAlign: 'center' }}>データがありません</Typography>
-      )
-    }
-  </Box>
+          sx={{
+            width: { xs: 200, md: 300 },
+            height: { xs: 200, md: 300 },
+          }}
+        >
+          {
+            monthlyTransactions.length !== 0 ? (
+              <Pie data={data} options={options} />
+            ) : (
+              <Typography sx={{ mt: 2, textAlign: 'center' }}>データがありません</Typography>
+            )
+          }
+        </Box>
       </Box>
   )
 }

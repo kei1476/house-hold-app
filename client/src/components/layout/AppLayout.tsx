@@ -23,7 +23,7 @@ const drawerWidth = 240;
 export default function AppLayout() {
   const location = useLocation();
 
-  const { currentMonth, monthlyTransactions, setMonthlyTransactions, setBudget } =
+  const { currentMonth, setMonthlyTransactions, setBudget } =
     useAppContext();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function AppLayout() {
         const params = {
           currentMonth: format(currentMonth, "yyyy-MM"),
         };
-        const res = await backendAxios.get("transaction/currentMonth/", {
+        const res = await backendAxios.get("transaction/currentMonth", {
           params,
         });
         setMonthlyTransactions(res.data.data);
