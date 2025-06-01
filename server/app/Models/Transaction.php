@@ -16,7 +16,7 @@ class Transaction extends Model
 		'id' => 'int',
 		'category_id' => 'int',
 		'amount' => 'int',
-		'date' => 'datetime:yyyy-MM-dd',
+		'date' => 'date:yyyy-MM-dd',
 	];
 
 	protected $fillable = [

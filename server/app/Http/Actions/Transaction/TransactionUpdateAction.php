@@ -23,6 +23,6 @@ class TransactionUpdateAction extends Controller
         $requestedTransactionData = $request->all();
         $transactions = $transactionService->update($requestedTransactionData, $id);
 
-        return TransactionResource::collection($transactions);
+        return new TransactionResource($transactions);
     }
 }
