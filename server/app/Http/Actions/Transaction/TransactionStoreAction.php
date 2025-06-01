@@ -6,7 +6,6 @@ use App\Http\Resources\TransactionResource;
 use App\Services\Contracts\TransactionServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class TransactionStoreAction
@@ -23,6 +22,6 @@ class TransactionStoreAction extends Controller
         $requestedTransactionData = $request->get('transaction');
         $transactions = $transactionService->store($requestedTransactionData);
 
-        return TransactionResource::collection($transactions);
+        return new TransactionResource($transactions);
     }
 }
