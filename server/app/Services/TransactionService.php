@@ -13,7 +13,7 @@ class TransactionService implements TransactionServiceInterface
     /**
      * Display a listing of the resource.
      */
-    public function index(string $currentMonth): Collection | null
+    public function getMonthlyTransactions(string $currentMonth): Collection | null
     {
         $start = Carbon::parse($currentMonth)->firstOfMonth();
         $end = Carbon::parse($currentMonth)->endOfMonth();

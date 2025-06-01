@@ -12,7 +12,7 @@ class BudgetService implements BudgetServiceInterface
     /**
      * Display a listing of the resource.
      */
-    public function getMonthlyBudgetAmount($budgetMonth): Budget|null
+    public function getMonthlyBudget($budgetMonth): Budget|null
     {
         return Budget::where('target_month', $budgetMonth)->first();
     }

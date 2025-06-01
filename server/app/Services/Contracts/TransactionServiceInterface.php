@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface TransactionServiceInterface
 {
-    public function index(string $currentMonth): Collection | null;
+    public function getMonthlyTransactions(string $currentMonth): Collection | null;
 
     public function store(array $attributes): Transaction;
 

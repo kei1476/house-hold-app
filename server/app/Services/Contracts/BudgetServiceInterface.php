@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 interface BudgetServiceInterface
 {
-    public function getMonthlyBudgetAmount($budgetMonth): Budget|null;
+    public function getMonthlyBudget($budgetMonth): Budget|null;
 
     public function store(array $attributes): Budget;
 

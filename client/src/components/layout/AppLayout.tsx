@@ -1,10 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import HomeIcon from "@mui/icons-material/Home";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import Toolbar from "@mui/material/Toolbar";
+import SettingsIcon from '@mui/icons-material/Settings';
 import Typography from "@mui/material/Typography";
 import { NavLink, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
@@ -27,37 +28,26 @@ export default function AppLayout() {
     useAppContext();
 
   useEffect(() => {
-    const fetchMonthlyTransactions = async () => {
+    const fetchMonthlyTransactionsAndMonthlyBudgets = async () => {
       try {
         const params = {
           currentMonth: format(currentMonth, "yyyy-MM"),
         };
-        const res = await backendAxios.get("transaction/currentMonth", {
+
+        const res = await backendAxios.get("home", {
           params,
         });
-        setMonthlyTransactions(res.data.data);
 
-        getMonthlyBudget();
+        setMonthlyTransactions(res.data.transactions);
+        setBudget(res.data.budget);
+
       } catch (err) {
         console.error(err);
       }
     };
 
-    fetchMonthlyTransactions();
+    fetchMonthlyTransactionsAndMonthlyBudgets();
   }, [currentMonth]);
-
-  const getMonthlyBudget = async () => {
-    try {
-      const params = {
-        currentMonth: format(currentMonth, "yyyy-MM"),
-      };
-      const res = await backendAxios.get(`budget/currentMonth`, { params });
-
-      setBudget(res.data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   interface menuItem {
     text: string;
@@ -74,6 +64,11 @@ export default function AppLayout() {
       text: "分析",
       path: "/analysis",
       icon: EqualizerIcon,
+    },
+    {
+      text: "設定",
+      path: "/settings",
+      icon: SettingsIcon,
     },
   ];
 
